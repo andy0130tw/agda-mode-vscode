@@ -14,6 +14,7 @@
 	"main": "./dist/app.bundle.js",
 	"repository": "https://github.com/banacorn/agda-mode-vscode",
 	"scripts": {
+		"postinstall": "patch-package",
 		"clean": "npx rescript clean",
 		"build": "npx rescript build -with-deps && npx lessc style/style.less dist/style.css && webpack --mode development",
 		"dev": "npx rescript build -w & npx less-watch-compiler style/ dist/ & webpack --mode development --watch",
@@ -29,6 +30,7 @@
 		"less-loader": "^7.0.2",
 		"less-watch-compiler": "^1.14.6",
 		"mocha": "^10.4.0",
+		"patch-package": "^8.0.0",
 		"rescript-mocha": "github:DZakh-forks/rescript-mocha#uncurried",
 		"webpack": "^5.76.0",
 		"webpack-cli": "^4.2.0"

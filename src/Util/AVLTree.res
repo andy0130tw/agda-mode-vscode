@@ -16,7 +16,7 @@ type options = {
 // Constructor
 ////////////////////////////////////////////////////////////////////////////////
 
-@module("@datastructures-js/binary-search-tree") @new
+@module("@andy0130tw/binary-search-tree") @new
 external makeInner: (
   ~compare: compareFunction<'a>=?,
   ~options: options=?,

@@ -109,7 +109,9 @@ jobs:
       - name: 🔍 Check if Agda has been installed
         id: check-agda
         continue-on-error: true
-        run: which agda
+        run: |
+          which agda
+          agda --version
 
       - name: 📦 Setup ${{ env.DIST }}
         if: ${{ steps.check-agda.outcome == 'failure'}}

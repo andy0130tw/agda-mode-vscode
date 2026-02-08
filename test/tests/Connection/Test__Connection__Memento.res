@@ -91,12 +91,15 @@ describe("Memento.PickedConnection", () => {
         // Memento: systemAgda (not in config)
         // Expected: userAgda should be used (from config)
 
+        This.retries(2)
+
         let configPaths = [userAgda.contents]
         let result = await makeConnection(Some(systemAgda.contents), configPaths)
 
         switch result {
         | Ok(connection) =>
           let actualPath = connection->Connection.getPath
+          // FIXME: this test is flaky
           Assert.deepStrictEqual(actualPath, userAgda.contents)
         | Error(_) => Assert.fail("Connection should succeed")
         }

@@ -114,9 +114,10 @@ module Module: Module = {
 
     process
     ->NodeJs.ChildProcess.onDisconnect(() => chan->Chan.emit(Event(OnDestroyed)))
-    ->NodeJs.ChildProcess.onError(exn =>
+    ->NodeJs.ChildProcess.onError(exn => {
+      Console.log2("[XXXXXXXXXXXXX]", exn)
       chan->Chan.emit(Event(OnError(Util.JsError.toString(exn))))
-    )
+    })
     ->ignore
 
     // emit `OnExit` when either `close` or `exit` was received

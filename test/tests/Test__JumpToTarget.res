@@ -5,6 +5,8 @@ describe("EventFromView.JumpToTarget", () => {
   let filename = "ModuleContents.agda"
   let filepath = Path.asset(filename)
 
+  Async.it("warms up", warmUpAgdaModeModule)
+
   Async.it("should set the cursor at the correct position", async () => {
     let ctx = await AgdaMode.makeAndLoad(filename)
 

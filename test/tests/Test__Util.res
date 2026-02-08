@@ -105,7 +105,7 @@ let runner: (unit => unit) => promise<result<'a, exn>> = %raw(` function(f) {
 
 
 
-      tmp = 
+      tmp =
 
 
 
@@ -524,6 +524,22 @@ module AgdaMode = {
 
   let nextGoal = execute(_, NextGoal)
   let previousGoal = execute(_, PreviousGoal)
+}
+
+let warmUpAgdaModeModule = async () => {
+  This.timeout(OS.onUnix ? 4000 : 10000)
+
+  let ctx = await AgdaMode.makeAndLoad("WarmUp.agda")
+  switch ctx.state.connection {
+  | Some(xxx) => Console.log2("[AGDA PATH IS]", xxx->Connection.getPath)
+  | None => Assert.fail("No connection path found")
+  }
+
+  let _ = await ctx.state->State__Connection.sendRequestAndCollectResponses(
+    Request.Load,
+  )
+
+  ()
 }
 
 // helper function for filtering out Highlighting & RunningInfo related responses

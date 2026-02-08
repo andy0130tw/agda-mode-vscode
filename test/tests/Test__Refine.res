@@ -11,6 +11,8 @@ describe("agda-mode.refine", () => {
     Async.beforeEach(async () => fileContent := (await File.read(Path.asset(filename))))
     Async.afterEach(async () => await File.write(Path.asset(filename), fileContent.contents))
 
+    Async.it("warms up", warmUpAgdaModeModule)
+
     Async.it(
       "should result in the correct refinement",
       async () => {
@@ -84,7 +86,7 @@ describe("agda-mode.refine", () => {
           ["#0 [14:7-14)", "#2 [22:33-40)", "#3 [22:16-23)", "#4 [22:24-31)"],
         )
 
-        // verify the refined content  
+        // verify the refined content
         await ctx->AgdaMode.quit
         let document = VSCode.TextEditor.document(ctx.state.editor)
         let actual = Editor.Text.get(
@@ -111,7 +113,7 @@ describe("agda-mode.refine", () => {
           ["#0 [14:7-14)", "#2 [22:33-40)", "#3 [22:16-23)", "#4 [22:24-31)"],
         )
 
-        // verify the refined content  
+        // verify the refined content
         await ctx->AgdaMode.quit
         let document = VSCode.TextEditor.document(ctx.state.editor)
         let actual = Editor.Text.get(
@@ -138,7 +140,7 @@ describe("agda-mode.refine", () => {
           ["#0 [14:7-14)", "#2 [22:33-40)", "#3 [22:16-23)", "#4 [22:24-31)"],
         )
 
-        // verify the refined content  
+        // verify the refined content
         await ctx->AgdaMode.quit
         let document = VSCode.TextEditor.document(ctx.state.editor)
         let actual = Editor.Text.get(
@@ -165,7 +167,7 @@ describe("agda-mode.refine", () => {
           ["#0 [14:7-14)", "#2 [22:33-40)", "#3 [22:16-23)", "#4 [22:24-31)"],
         )
 
-        // verify the refined content  
+        // verify the refined content
         await ctx->AgdaMode.quit
         let document = VSCode.TextEditor.document(ctx.state.editor)
         let actual = Editor.Text.get(
@@ -192,7 +194,7 @@ describe("agda-mode.refine", () => {
           ["#0 [14:7-14)", "#2 [22:33-40)", "#3 [22:16-23)", "#4 [22:24-31)"],
         )
 
-        // verify the refined content  
+        // verify the refined content
         await ctx->AgdaMode.quit
         let document = VSCode.TextEditor.document(ctx.state.editor)
         let actual = Editor.Text.get(
@@ -219,7 +221,7 @@ describe("agda-mode.refine", () => {
           ["#0 [14:7-14)", "#2 [22:33-40)", "#3 [22:16-23)", "#4 [22:24-31)"],
         )
 
-        // verify the refined content  
+        // verify the refined content
         await ctx->AgdaMode.quit
         let document = VSCode.TextEditor.document(ctx.state.editor)
         let actual = Editor.Text.get(
@@ -279,7 +281,7 @@ describe("agda-mode.refine", () => {
           ["#0 [14:7-14)", "#2 [22:33-40)", "#3 [22:16-23)", "#4 [22:24-31)"],
         )
 
-        // verify the refined content  
+        // verify the refined content
         await ctx->AgdaMode.quit
         let document = VSCode.TextEditor.document(ctx.state.editor)
         let actual = Editor.Text.get(

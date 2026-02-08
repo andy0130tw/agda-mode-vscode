@@ -10,6 +10,8 @@ describe(
     Async.beforeEach(async () => fileContent := (await File.read(Path.asset(filename))))
     Async.afterEach(async () => await File.write(Path.asset(filename), fileContent.contents))
 
+    Async.it("warms up", warmUpAgdaModeModule)
+
     Async.it("should work after inserting a newline", async () => {
       let ctx = await AgdaMode.makeAndLoad(filename)
       let _ = await Editor.Text.insert(ctx.state.document, VSCode.Position.make(6, 0), "\n")

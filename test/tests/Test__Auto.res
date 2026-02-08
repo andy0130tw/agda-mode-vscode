@@ -72,7 +72,9 @@ let run = normalization => {
 }
 
 describe("agda-mode.auto", () => {
-  This.timeout(10000)
+  This.timeout(4000)
+
+  Async.it("warms up", warmUpAgdaModeModule)
 
   // // testing for Auto somehow hangs on GitHub Actions Windows runners (but works fine on my desktop Windows :))
   // // cannot find out why, so skip the tests on Windows for now

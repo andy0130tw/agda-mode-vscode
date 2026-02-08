@@ -55,6 +55,8 @@ open Test__Util
 describe("agda-mode.case", () => {
   This.timeout(10000)
 
+  Async.it("warms up", warmUpAgdaModeModule)
+
   let fileContent = ref("")
   Async.beforeEach(async () => fileContent := (await File.read(Path.asset("CaseSplit.agda"))))
   Async.afterEach(async () => await File.write(Path.asset("CaseSplit.agda"), fileContent.contents))

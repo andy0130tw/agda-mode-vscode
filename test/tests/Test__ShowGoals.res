@@ -7,6 +7,8 @@ let run = normalization => {
   Async.beforeEach(async () => fileContent := (await File.read(Path.asset(filename))))
   Async.afterEach(async () => await File.write(Path.asset(filename), fileContent.contents))
 
+  Async.it("warms up", warmUpAgdaModeModule)
+
   Async.it("should be responded with correct responses", async () => {
     let ctx = await AgdaMode.makeAndLoad(filename)
     let responses =
@@ -17,7 +19,7 @@ let run = normalization => {
     let filteredResponses = responses->Array.filter(filteredResponse)
 
     let filepath = Path.asset(filename)
-    
+
     switch ctx.state.agdaVersion {
     | Some(version) =>
       let expectedAllGoalsWarningsBody = if Util.Version.gte(version, "2.8.0") {

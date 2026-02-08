@@ -9,6 +9,8 @@ describe("Goals", () => {
   Async.afterEach(async () => await File.write(Path.asset(filename), fileContent.contents))
   Async.after(async () => await File.write(Path.asset(filename), fileContent.contents))
 
+  Async.it("warms up", warmUpAgdaModeModule)
+
   describe("Handle `onDidChangeTextDocument`", () => {
     Async.it(
       "should instantiate all 5 goals with question marks expanded to holes",

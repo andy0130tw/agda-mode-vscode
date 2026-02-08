@@ -7,6 +7,8 @@ let run = normalization => {
   Async.beforeEach(async () => fileContent := (await File.read(Path.asset(filename))))
   Async.afterEach(async () => await File.write(Path.asset(filename), fileContent.contents))
 
+  Async.it("warms up", warmUpAgdaModeModule)
+
   Async.it("should be responded with correct responses (>= 2.7.0)", async () => {
     let versionValid = await AgdaMode.versionGTE("agda", "2.7.0")
     if versionValid {

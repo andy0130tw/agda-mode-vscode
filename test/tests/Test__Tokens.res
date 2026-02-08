@@ -5,6 +5,9 @@ open Tokens
 
 describe("Tokens", () => {
   This.timeout(10000)
+
+  Async.it("warms up", warmUpAgdaModeModule)
+
   describe("Token generation", () => {
     Async.it(
       "should emit `onUpdate` event when highlighting is generated",

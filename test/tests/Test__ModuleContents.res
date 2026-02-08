@@ -57,6 +57,8 @@ let run = normalization => {
 }
 
 describe("agda-mode.module-contents", () => {
+  Async.it("warms up", warmUpAgdaModeModule)
+
   describe("Simplified", () => {
     run(Simplified)
   })

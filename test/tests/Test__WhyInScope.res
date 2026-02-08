@@ -7,6 +7,8 @@ describe("agda-mode.why-in-scope", () => {
   Async.beforeEach(async () => fileContent := (await File.read(Path.asset(filename))))
   Async.afterEach(async () => await File.write(Path.asset(filename), fileContent.contents))
 
+  Async.it("warms up", warmUpAgdaModeModule)
+
   Async.it("should be responded with correct responses (goal)", async () => {
     let ctx = await AgdaMode.makeAndLoad(filename)
     let responses = await ctx.state->State__Connection.sendRequestAndCollectResponses(
@@ -23,7 +25,7 @@ describe("agda-mode.why-in-scope", () => {
 
     let filteredResponses = responses->Array.filter(filteredResponse)
     let dependencyFilepath = Path.asset("Lib.agda")
-    
+
     switch ctx.state.agdaVersion {
     | Some(version) =>
       let positionFormat = if Util.Version.gte(version, "2.8.0") {
@@ -33,7 +35,7 @@ describe("agda-mode.why-in-scope", () => {
         // Pre-2.8.0 uses comma format
         ":4,3-7"
       }
-      
+
       Assert.deepStrictEqual(
         filteredResponses,
         [
@@ -58,7 +60,7 @@ describe("agda-mode.why-in-scope", () => {
 
     let filteredResponses = responses->Array.filter(filteredResponse)
     let dependencyFilepath = Path.asset("Lib.agda")
-    
+
     switch ctx.state.agdaVersion {
     | Some(version) =>
       let positionFormat = if Util.Version.gte(version, "2.8.0") {
@@ -68,7 +70,7 @@ describe("agda-mode.why-in-scope", () => {
         // Pre-2.8.0 uses comma format
         ":4,3-7"
       }
-      
+
       Assert.deepStrictEqual(
         filteredResponses,
         [

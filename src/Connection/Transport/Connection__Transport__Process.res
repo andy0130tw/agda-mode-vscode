@@ -61,8 +61,6 @@ module Module: Module = {
     let chan = Chan.make()
     let stderr = ref("")
 
-    Console.log3("[XXXXXXXXXXXXXX] starting process", path, args)
-
     // spawn the child process
     let process = NodeJs.ChildProcess.spawnWith("\"" ++ path ++ "\"", args, %raw(`{shell : true}`))
 
@@ -72,7 +70,6 @@ module Module: Module = {
     ->Option.forEach(stream =>
       stream
       ->NodeJs.Stream.onData(chunk => {
-        Console.log2("[XXXXXXXXXXXXX] proc ondata", chunk)
         chan->Chan.emit(Stdout(NodeJs.Buffer.toString(chunk)))
       })
       ->ignore
@@ -84,7 +81,6 @@ module Module: Module = {
     ->Option.forEach(stream =>
       stream
       ->NodeJs.Stream.onData(chunk => {
-        Console.log2("[XXXXXXXXXXXXX] proc onerr", chunk)
         chan->Chan.emit(Stderr(NodeJs.Buffer.toString(chunk)))
         // store the latest message from stderr
         stderr := stderr.contents ++ NodeJs.Buffer.toString(chunk)
@@ -117,7 +113,6 @@ module Module: Module = {
     process
     ->NodeJs.ChildProcess.onDisconnect(() => chan->Chan.emit(Event(OnDestroyed)))
     ->NodeJs.ChildProcess.onError(exn => {
-      Console.log2("[XXXXXXXXXXXXX] proc error", exn)
       chan->Chan.emit(Event(OnError(Util.JsError.toString(exn))))
     })
     ->ignore
@@ -125,7 +120,6 @@ module Module: Module = {
     // emit `OnExit` when either `close` or `exit` was received
     Promise.race([promiseOnExit, promiseOnClose])
     ->Promise.thenResolve(exitCode => {
-      Console.log2("[XXXXXXXXXXXXX] proc exit", exitCode)
       chan->Chan.emit(Event(OnExit(exitCode)))
     })
     ->ignore

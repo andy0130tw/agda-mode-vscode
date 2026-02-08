@@ -263,7 +263,7 @@ module Module: Module = {
       Console.log2("[XXXXXXXXXXXXXXXXXXXXXX] tryCommand", command)
       switch await PlatformOps.findCommand(command) {
       | Ok(rawPath) => {
-        Console.log2("[XXXXXXXXXXXXXXXXXXXXXX] get raw path", rawPath)
+        Console.log2("[XXXXXXXXXXXXXXXXXXXXXX] get raw path", "'" ++ rawPath ++ "'")
         await make(rawPath)
       }
       | Error(commandError) => Error(Error.Establish.fromCommandError(command, commandError))

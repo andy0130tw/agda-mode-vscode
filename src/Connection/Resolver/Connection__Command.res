@@ -48,13 +48,10 @@ let search = async (name, ~timeout=1000) => {
     // try `which` first, then `where.exe`
     await retryFor(3, async () =>
       switch await searchWith("which", name, ~timeout) {
-      | Ok(stdout) => switch stdout {
-        | "" => {
+      | Ok(stdout) => if stdout == "" {
           Console.log("[XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX] 'which' returns empty result!!!")
           Error(Error.InternalError)
-        }
-        | _  => Ok(stdout)
-        }
+        } else { Ok(stdout) }
       | Error(_) => await searchWith("where.exe", name, ~timeout)
       }
     )

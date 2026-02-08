@@ -31,14 +31,12 @@ let search = async (name, ~timeout=1000) => {
   } else {
     // try `which` first, then `where.exe`
     switch await searchWith("which", name, ~timeout) {
-    | Ok(stdout) => {
-      Console.log2("[XXXXXXXXXXXXXXXXXX] OK", stdout)
-      Ok(stdout)
-    }
-    | Error(_) => {
-        let ret = await searchWith("where.exe", name, ~timeout)
-        Console.log2("[XXXXXXXXXXXXXXXXXXXXXX] where?", ret)
-        ret
+    | Ok(stdout) => Ok(stdout)
+    | Error(err) => {
+        if name == "agda" {
+          Console.log2("[XXXXXXXXXXXXXXXXXXXXXXX] Failed to locate agda", err)
+        }
+        await searchWith("where.exe", name, ~timeout)
       }
     }
   }

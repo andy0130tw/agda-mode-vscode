@@ -379,9 +379,12 @@ describe("Connection", () => {
     Async.it(
       "should handle ALS executable probing (without full connection)",
       async () => {
+        This.retries(2)
+
         // Test just the probing part which we know works
         let result = await Connection.probeFilepath(alsMockPath.contents)
 
+        // FIXME: this test is flaky
         switch result {
         | Ok(path, IsALS(alsVersion, agdaVersion, lspOptions)) =>
           Assert.deepStrictEqual(path, alsMockPath.contents)

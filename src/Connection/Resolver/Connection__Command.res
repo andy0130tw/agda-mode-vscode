@@ -33,8 +33,8 @@ let search = async (name, ~timeout=1000) => {
     switch await searchWith("which", name, ~timeout) {
     | Ok(stdout) => Ok(stdout)
     | Error(err) => {
-        if name == "agda" {
-          Console.log2("[XXXXXXXXXXXXXXXXXXXXXXX] Failed to locate agda", err)
+        if name != "als" {
+          Console.log3("[XXXXXXXXXXXXXXXXXXXXXXX] Failed to locate", name, err)
         }
         await searchWith("where.exe", name, ~timeout)
       }

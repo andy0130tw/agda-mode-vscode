@@ -172,9 +172,11 @@ module Module: Module = {
 
   let make = async (rawpath: string): result<t, Error.Establish.t> => {
     switch await probeFilepath(rawpath) {
-    | Ok(path, IsAgda(agdaVersion)) =>
+    | Ok(path, IsAgda(agdaVersion)) => {
+      Console.log3("[XXXXXXXXXXXXXXX]", path, agdaVersion)
       let connection = await Agda.make(path, agdaVersion)
       Ok(Agda(connection, path, agdaVersion))
+    }
     | Ok(path, IsALS(alsVersion, agdaVersion, lspOptions)) =>
       switch await ALS.make(
         Connection__Transport.ViaPipe(rawpath, []),

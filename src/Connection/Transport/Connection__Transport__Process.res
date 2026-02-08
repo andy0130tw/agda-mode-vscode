@@ -60,6 +60,9 @@ module Module: Module = {
   let make = (path, args) => {
     let chan = Chan.make()
     let stderr = ref("")
+
+    Console.log3("[XXXXXXXXXXXXXX] starting process", path, args)
+
     // spawn the child process
     let process = NodeJs.ChildProcess.spawnWith("\"" ++ path ++ "\"", args, %raw(`{shell : true}`))
 

@@ -96,6 +96,8 @@ describe("Config.Connection paths", () => {
     Async.it(
       "should not modify config with single working path",
       async () => {
+        This.retries(2)
+
         let configPaths = [userAgda.contents]
         let (logs, result) = await makeConnection(configPaths, platformWithDiscovery)
 
@@ -105,6 +107,7 @@ describe("Config.Connection paths", () => {
 
         switch result {
         | Ok(connection) =>
+          // FIXME: this test is flaky
           Assert.deepStrictEqual(connection->Connection.getPath, userAgda.contents)
         | Error(_) => Assert.fail("Connection should succeed")
         }

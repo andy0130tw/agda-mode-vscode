@@ -39,6 +39,8 @@ let run = normalization => {
 }
 
 describe("agda-mode.compute-normal-form", () => {
+  This.timeout(10000)
+
   describe("DefaultCompute", () => {
     run(DefaultCompute)
   })

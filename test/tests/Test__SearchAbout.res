@@ -7,8 +7,6 @@ let run = normalization => {
   Async.beforeEach(async () => fileContent := await File.read(Path.asset(filename)))
   Async.afterEach(async () => await File.write(Path.asset(filename), fileContent.contents))
 
-  Async.it("warms up", warmUpAgdaModeModule)
-
   Async.it("should be responded with correct responses", async () => {
     let ctx = await AgdaMode.makeAndLoad(filename)
     let responses = await ctx.state->State__Connection.sendRequestAndCollectResponses(
@@ -44,6 +42,8 @@ let run = normalization => {
 }
 
 describe("agda-mode.search-about", () => {
+  Async.it("warms up", warmUpAgdaModeModule)
+
   describe("Simplified", () => {
     run(Simplified)
   })

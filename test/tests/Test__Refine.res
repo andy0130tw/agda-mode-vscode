@@ -3,6 +3,9 @@ open Test__Util
 
 describe("agda-mode.refine", () => {
   This.timeout(4000)
+
+  Async.it("warms up", warmUpAgdaModeModule)
+
   describe("On GiveString 1 (Issue #158)", () => {
     let fileContent = ref("")
 
@@ -10,8 +13,6 @@ describe("agda-mode.refine", () => {
 
     Async.beforeEach(async () => fileContent := (await File.read(Path.asset(filename))))
     Async.afterEach(async () => await File.write(Path.asset(filename), fileContent.contents))
-
-    Async.it("warms up", warmUpAgdaModeModule)
 
     Async.it(
       "should result in the correct refinement",

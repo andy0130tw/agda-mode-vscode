@@ -6,8 +6,6 @@ let run = normalization => {
   Async.beforeEach(async () => fileContent := (await File.read(Path.asset("Issue204.agda"))))
   Async.afterEach(async () => await File.write(Path.asset("Issue204.agda"), fileContent.contents))
 
-  Async.it("warms up", warmUpAgdaModeModule)
-
   Async.it("should be responded with correct responses", async () => {
     let ctx = await AgdaMode.makeAndLoad("Issue204.agda")
 
@@ -38,6 +36,8 @@ let run = normalization => {
 }
 
 describe("agda-mode.solve-constraints", () => {
+  Async.it("warms up", warmUpAgdaModeModule)
+
   describe("AsIs", () => {
     run(AsIs)
   })

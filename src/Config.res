@@ -81,18 +81,22 @@ module Connection = {
 
   let getAgdaPaths = () =>
     if inTestingMode.contents {
+      Console.log2("[XXXXXXXXXXXXXX] getAgdaPaths", agdaPathsInTestingMode.contents)
       agdaPathsInTestingMode.contents
     } else {
-      Workspace.getConfiguration(Some("agdaMode"), None)
+      let ret = Workspace.getConfiguration(Some("agdaMode"), None)
       ->WorkspaceConfiguration.get("connection.paths")
       ->Option.getOr(JSON.Null)
       ->parseAgdaPaths
+      Console.log2("[XXXXXXXXXXXXXX] getAgdaPaths", ret)
+      ret
     }
 
   // new path is APPENDED to the end of the list
   // no-op if it's already in the list
   let addAgdaPath = (logChannel: Chan.t<Log.t>, path: string) => {
     let paths = getAgdaPaths()
+    Console.log3("[XXXXXXXXXXXXXX] addAgdaPath", paths, path)
     let alreadyExists = paths->Array.includes(path)
 
     if alreadyExists {
@@ -114,6 +118,7 @@ module Connection = {
 
   // overwrite all Agda paths
   let setAgdaPaths = (logChannel: Chan.t<Log.t>, paths) => {
+    Console.log2("[XXXXXXXXXXXXXX] setAgdaPaths", paths)
     if inTestingMode.contents {
       logChannel->Chan.emit(Log.Config(Changed(agdaPathsInTestingMode.contents, paths)))
       agdaPathsInTestingMode := paths

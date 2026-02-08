@@ -259,6 +259,7 @@ module Module: Module = {
     module PlatformOps = unpack(platformDeps)
 
     let tryCommand = async (command): result<t, Error.Establish.t> => {
+      Console.log2("[XXXXXXXXXXXXXXXXXXXXXX] tryCommand", command)
       switch await PlatformOps.findCommand(command) {
       | Ok(rawPath) => await make(rawPath)
       | Error(commandError) => Error(Error.Establish.fromCommandError(command, commandError))

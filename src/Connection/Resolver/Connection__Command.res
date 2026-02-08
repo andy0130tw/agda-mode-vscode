@@ -31,29 +31,34 @@ let search = async (name, ~timeout=1000) => {
   let retryFor = (count: int, callback: () => promise<result<'a, 'b>>) => {
     let rec retry = async (n: int) =>
       switch await callback() {
-      | Ok(v) => Ok(v)
-      | Error(err) =>
+      | Error(Error.InternalError) => {
         if n > 0 {
           await retry(n - 1)
         } else {
-          Error(err)
+          Error(Error.InternalError)
         }
+      }
+      | result => result
     }
     retry(count)
   }
 
+  let flakyWhich = () => retryFor(3, async () =>
+    switch await searchWith("which", name, ~timeout) {
+    | Ok(stdout) => if stdout == "" {
+        Console.log("[XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX] 'which' returns empty result!!!")
+        Error(Error.InternalError)
+      } else { Ok(stdout) }
+    | Error(err) => Error(err)
+  })
+
   if OS.onUnix {
-    await searchWith("which", name, ~timeout)
+    await flakyWhich()
   } else {
     // try `which` first, then `where.exe`
-    await retryFor(3, async () =>
-      switch await searchWith("which", name, ~timeout) {
-      | Ok(stdout) => if stdout == "" {
-          Console.log("[XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX] 'which' returns empty result!!!")
-          Error(Error.InternalError)
-        } else { Ok(stdout) }
-      | Error(_) => await searchWith("where.exe", name, ~timeout)
-      }
-    )
+    switch await flakyWhich() {
+    | Ok(stdout) => Ok(stdout)
+    | Error(_) => await searchWith("where.exe", name, ~timeout)
+    }
   }
 }

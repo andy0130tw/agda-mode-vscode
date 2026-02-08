@@ -3,11 +3,13 @@
 module Error = {
   type t =
     | NotFound
+    | InternalError
     | SomethingWentWrong(Connection__Process__Exec.Error.t)
 
   let toString = error =>
     switch error {
     | NotFound => "Command not found"
+    | InternalError => "Internal error"
     | SomethingWentWrong(e) => Connection__Process__Exec.Error.toString(e)
     }
 }
@@ -26,18 +28,32 @@ let searchWith = async (command, name, ~timeout=1000) => {
 }
 
 let search = async (name, ~timeout=1000) => {
+  let retryFor = (count: int, callback: () => promise<result<'a, 'b>>) => {
+    let rec retry = async (n: int) =>
+      switch await callback() {
+      | Ok(v) => Ok(v)
+      | Error(err) =>
+        if n > 0 {
+          await retry(n - 1)
+        } else {
+          Error(err)
+        }
+    }
+    retry(count)
+  }
+
   if OS.onUnix {
     await searchWith("which", name, ~timeout)
   } else {
     // try `which` first, then `where.exe`
-    switch await searchWith("which", name, ~timeout) {
-    | Ok(stdout) => Ok(stdout)
-    | Error(err) => {
-        if name != "als" {
-          Console.log3("[XXXXXXXXXXXXXXXXXXXXXXX] Failed to locate", name, err)
+    await retryFor(3, async () =>
+      switch await searchWith("which", name, ~timeout) {
+      | Ok(stdout) => switch stdout {
+        | "" => Error(Error.InternalError)
+        | _  => Ok(stdout)
         }
-        await searchWith("where.exe", name, ~timeout)
+      | Error(_) => await searchWith("where.exe", name, ~timeout)
       }
-    }
+    )
   }
 }

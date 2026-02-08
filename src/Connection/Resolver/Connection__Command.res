@@ -50,7 +50,7 @@ let search = async (name, ~timeout=1000) => {
       switch await searchWith("which", name, ~timeout) {
       | Ok(stdout) => switch stdout {
         | "" => {
-          Console.log("[XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX] which returns empty result!!!")
+          Console.log("[XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX] 'which' returns empty result!!!")
           Error(Error.InternalError)
         }
         | _  => Ok(stdout)

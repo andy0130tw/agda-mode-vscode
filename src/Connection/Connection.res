@@ -173,7 +173,6 @@ module Module: Module = {
   let make = async (rawpath: string): result<t, Error.Establish.t> => {
     switch await probeFilepath(rawpath) {
     | Ok(path, IsAgda(agdaVersion)) => {
-      Console.log3("[XXXXXXXXXXXXXXX]", path, agdaVersion)
       let connection = await Agda.make(path, agdaVersion)
       Ok(Agda(connection, path, agdaVersion))
     }
@@ -263,7 +262,10 @@ module Module: Module = {
     let tryCommand = async (command): result<t, Error.Establish.t> => {
       Console.log2("[XXXXXXXXXXXXXXXXXXXXXX] tryCommand", command)
       switch await PlatformOps.findCommand(command) {
-      | Ok(rawPath) => await make(rawPath)
+      | Ok(rawPath) => {
+        Console.log2("[XXXXXXXXXXXXXXXXXXXXXX] get raw path", rawPath)
+        await make(rawPath)
+      }
       | Error(commandError) => Error(Error.Establish.fromCommandError(command, commandError))
       }
     }
